@@ -1,7 +1,7 @@
 package com.walle.credit.calc.service;
 
-import com.walle.credit.calc.entity.CreditData;
-import com.walle.credit.calc.entity.CreditDataBuilder;
+import com.walle.credit.calc.model.CreditData;
+import com.walle.credit.calc.model.CreditDataBuilder;
 import com.walle.credit.calc.repository.CreditDataRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;

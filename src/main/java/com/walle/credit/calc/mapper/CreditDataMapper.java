@@ -1,8 +1,8 @@
 package com.walle.credit.calc.mapper;
 
-import com.walle.credit.calc.dto.CreditDataDto;
+import com.walle.credit.calc.dto.CreditDataInputDto;
 import com.walle.credit.calc.dto.CreditDataResultDto;
-import com.walle.credit.calc.entity.CreditData;
+import com.walle.credit.calc.model.CreditData;
 import static com.walle.credit.calc.util.CalcConstants.ROUND_MODE;
 import static com.walle.credit.calc.util.CalcConstants.SCALE_2;
 import java.math.BigDecimal;
@@ -23,7 +23,7 @@ public interface CreditDataMapper {
     @Mapping(source = "apartmentCost", target = "apartmentCost", qualifiedByName = "stringToBigDecimal")
     @Mapping(source = "percentage", target = "percentage", qualifiedByName = "stringToBigDecimal")
     @Mapping(source = "userOwnPayment", target = "userOwnPayment", qualifiedByName = "stringToBigDecimal")
-    CreditData toEntity(CreditDataDto creditDataDto);
+    CreditData toEntity(CreditDataInputDto creditDataInputDto);
 
     @Named("stringToBigDecimal")
     default BigDecimal stringToBigDecimal(String number) {

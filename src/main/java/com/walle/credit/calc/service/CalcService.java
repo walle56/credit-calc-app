@@ -1,6 +1,6 @@
 package com.walle.credit.calc.service;
 
-import com.walle.credit.calc.entity.CreditData;
+import com.walle.credit.calc.model.CreditData;
 import com.walle.credit.calc.repository.CreditDataRepository;
 import static com.walle.credit.calc.util.CalcConstants.ROUND_MODE;
 import static com.walle.credit.calc.util.CalcConstants.SCALE_2;
@@ -22,6 +22,12 @@ public class CalcService {
         this.creditDataRepository = creditDataRepository;
     }
 
+    /**
+     * Calculates monthly payment
+     *
+     * @param creditData input credit parameters
+     * @return CreditData with monthly payment
+     */
     public CreditData calculatePayments(CreditData creditData) {
         try {
             // calculate monthly percentage:
@@ -29,29 +35,26 @@ public class CalcService {
             BigDecimal monthlyPercentage = creditData.getPercentage()
                     .divide(BigDecimal.valueOf(12), SCALE_8, ROUND_MODE)
                     .divide(BigDecimal.valueOf(100), SCALE_8, ROUND_MODE);
-            System.out.println(monthlyPercentage);
 
             // calculate power of monthlyPercentage to total months:
             // percentagePowMonths = (1 + monthlyPercentage) power of (creditData.years * 12)
             BigDecimal percentagePowMonths = BigDecimal.ONE.add(monthlyPercentage)
                     .pow(-(creditData.getYears() * 12), new MathContext(SCALE_8))
                     .setScale(SCALE_8, ROUND_MODE);
-            System.out.println(percentagePowMonths);
 
             // calculate right part of the formula:
             // rightValue = monthlyPercentage / (1 - percentagePowMonths)
             BigDecimal rightValue = monthlyPercentage
                     .divide(BigDecimal.ONE
                             .subtract(percentagePowMonths), SCALE_8, ROUND_MODE);
-            System.out.println(rightValue);
 
             // result = (creditData.apartmentCost - creditData.userOwnPayment) * rightValue
             BigDecimal result = rightValue.multiply(creditData.getApartmentCost()
                             .subtract(creditData.getUserOwnPayment()))
                     .setScale(SCALE_2, ROUND_MODE);
-            System.out.println(result);
 
             creditData.setMonthlyPayment(result);
+            LOG.debug("Calculated credit data: {}", creditData.toString());
 
         } catch (Exception e) {
             LOG.error("Error while calculating the credit data.", e);
@@ -62,6 +65,10 @@ public class CalcService {
         return creditData;
     }
 
+    /**
+     * Method to read all credit calculation
+     * @return all credit calculation from the DB
+     */
     public Iterable<CreditData> getAllCalculations() {
         return creditDataRepository.findAll();
     }
