@@ -1,6 +1,6 @@
 package com.walle.credit.calc.controller;
 
-import com.walle.credit.calc.dto.CreditDataDto;
+import com.walle.credit.calc.dto.CreditDataInputDto;
 import com.walle.credit.calc.dto.CreditDataResultDto;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,8 +37,9 @@ class CalcControllerTest {
 
     @Test
     public void testCalculationWithIntegerNumbers() throws Exception {
-        CreditDataDto dto = new CreditDataDto("700000", "2.24", "200000", 20);
-        ResponseEntity<CreditDataResultDto> response = restTemplate.postForEntity(HOST + port + PATH_CALC, dto, CreditDataResultDto.class);
+        CreditDataInputDto dto = new CreditDataInputDto("700000", "2.24", "200000", 20);
+        ResponseEntity<CreditDataResultDto> response = restTemplate.exchange(HOST + port + PATH_CALC,
+                HttpMethod.PUT, new HttpEntity<>(dto), CreditDataResultDto.class);
 
         assertNotNull(response.getBody());
         assertEquals(700000.0, response.getBody().getApartmentCost());
@@ -46,8 +48,9 @@ class CalcControllerTest {
 
     @Test
     public void testCalculationWithDecimalNumbers() throws Exception {
-        CreditDataDto dto = new CreditDataDto("500000.50", "12.95", "100000.90", 30);
-        ResponseEntity<CreditDataResultDto> response = restTemplate.postForEntity(HOST + port + PATH_CALC, dto, CreditDataResultDto.class);
+        CreditDataInputDto dto = new CreditDataInputDto("500000.50", "12.95", "100000.90", 30);
+        ResponseEntity<CreditDataResultDto> response = restTemplate.exchange(HOST + port + PATH_CALC,
+                HttpMethod.PUT, new HttpEntity<>(dto), CreditDataResultDto.class);
 
         assertNotNull(response.getBody());
         assertEquals(500000.50, response.getBody().getApartmentCost());
@@ -56,8 +59,9 @@ class CalcControllerTest {
     
     @Test
     public void shouldFailOnConvertToNumber() throws Exception {
-        CreditDataDto dto = new CreditDataDto("50string", "2", "10", 20);
-        ResponseEntity<String> response = restTemplate.postForEntity(HOST + port + PATH_CALC, dto, String.class);
+        CreditDataInputDto dto = new CreditDataInputDto("50string", "2", "10", 20);
+        ResponseEntity<String> response = restTemplate.exchange(HOST + port + PATH_CALC,
+                HttpMethod.PUT, new HttpEntity<>(dto), String.class);
 
         assertNotNull(response.getBody());
         assertTrue(response.getBody().contains("Bad Request"));
@@ -65,10 +69,12 @@ class CalcControllerTest {
 
     @Test
     public void testGetListOfAllCalculations() throws Exception {
-        CreditDataDto dto1 = new CreditDataDto("7000.00", "22.95", "1000.10", 30);
-        restTemplate.postForEntity(HOST + port + PATH_CALC, dto1, CreditDataResultDto.class);
-        CreditDataDto dto2 = new CreditDataDto("9000.00", "25.95", "3000.10", 20);
-        restTemplate.postForEntity(HOST + port + PATH_CALC, dto2, CreditDataResultDto.class);
+        CreditDataInputDto dto1 = new CreditDataInputDto("7000.00", "22.95", "1000.10", 30);
+        restTemplate.exchange(HOST + port + PATH_CALC,
+                HttpMethod.PUT, new HttpEntity<>(dto1), CreditDataResultDto.class);
+        CreditDataInputDto dto2 = new CreditDataInputDto("9000.00", "25.95", "3000.10", 20);
+        restTemplate.exchange(HOST + port + PATH_CALC,
+                HttpMethod.PUT, new HttpEntity<>(dto2), CreditDataResultDto.class);
 
         ResponseEntity<List<CreditDataResultDto>> response = restTemplate.exchange(HOST + port + PATH_LIST,
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<CreditDataResultDto>>() {});

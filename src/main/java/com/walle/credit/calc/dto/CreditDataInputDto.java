@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreditDataDto {
+public class CreditDataInputDto {
 
     @StringToNumberConstraint
     @JsonProperty("totalCost")

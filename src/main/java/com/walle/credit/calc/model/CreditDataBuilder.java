@@ -1,4 +1,4 @@
-package com.walle.credit.calc.entity;
+package com.walle.credit.calc.model;
 
 import java.math.BigDecimal;
 

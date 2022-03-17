@@ -1,8 +1,8 @@
 package com.walle.credit.calc.controller;
 
-import com.walle.credit.calc.dto.CreditDataDto;
+import com.walle.credit.calc.dto.CreditDataInputDto;
 import com.walle.credit.calc.dto.CreditDataResultDto;
-import com.walle.credit.calc.entity.CreditData;
+import com.walle.credit.calc.model.CreditData;
 import com.walle.credit.calc.mapper.CreditDataMapper;
 import com.walle.credit.calc.service.CalcService;
 import java.util.List;
@@ -30,14 +30,14 @@ public class CalcController {
         this.creditDataMapper = creditDataMapper;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/calculate",
+    @RequestMapping(method = RequestMethod.PUT, value = "/calculate",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CreditDataResultDto calculatePayments(@Valid @RequestBody CreditDataDto creditDataDto) {
-        LOG.info("Call to /calculate with data: " + creditDataDto.toString());
+    public CreditDataResultDto calculatePayments(@Valid @RequestBody CreditDataInputDto creditDataInputDto) {
+        LOG.info("Call to /calculate with data: " + creditDataInputDto.toString());
         return creditDataMapper.toDto(
                 calcService.calculatePayments(
-                        creditDataMapper.toEntity(creditDataDto)));
+                        creditDataMapper.toEntity(creditDataInputDto)));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/calculate/list",
