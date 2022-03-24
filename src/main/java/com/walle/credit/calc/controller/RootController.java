@@ -5,9 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * This class will be used later when frontend will be done
+ * This class will be used later when frontend will be implemented
  */
-
 //@Controller
 public class RootController {
 

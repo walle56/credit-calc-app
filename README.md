@@ -2,16 +2,16 @@
 `It is still under development`
                  
 ### Description:
-This project shows the basics of the Layered Architecture.  
-It has examples of how to:  
--- write the Spring Boot application and run it
--- use Logback for logging activities
--- convert DTO to Entity and vice versa,  
--- validate the DTO on the controller level using Spring  
--- calculate money  
--- write integration tests using SpringBootTest  
--- write unit tests with Mockito  
--- use frameworks like Lombok, Mapstruct, H2 embedded DB
+This project shows the basics of the Layered Architecture.    
+It has examples of how to:    
+-- write the Spring Boot application and run it  
+-- use Logback for logging activities  
+-- convert DTO to Entity and vice versa,    
+-- validate the DTO on the controller level using Spring    
+-- calculate money    
+-- write integration tests using SpringBootTest    
+-- write unit tests with Mockito    
+-- use frameworks like Lombok, Mapstruct, H2 embedded DB  
 
 ### Preconditions:
 -- AdoptOpenJDK 11  
