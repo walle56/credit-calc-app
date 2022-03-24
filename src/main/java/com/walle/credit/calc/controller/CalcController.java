@@ -35,17 +35,19 @@ public class CalcController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public CreditDataResultDto calculatePayments(@Valid @RequestBody CreditDataInputDto creditDataInputDto) {
         LOG.info("Call to /calculate with data: " + creditDataInputDto.toString());
+
+        CreditData creditData = creditDataMapper.toEntity(creditDataInputDto);
         return creditDataMapper.toDto(
-                calcService.calculatePayments(
-                        creditDataMapper.toEntity(creditDataInputDto)));
+                calcService.calculatePayments(creditData));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/calculate/list",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CreditDataResultDto> getAllCalculations() {
         LOG.info("Call to /calculate/list");
-        Iterable<CreditData> allCalculations = calcService.getAllCalculations();
-        return creditDataMapper.toDto(allCalculations);
+
+        return creditDataMapper.toDto(
+                calcService.getAllCalculations());
     }
 
 }

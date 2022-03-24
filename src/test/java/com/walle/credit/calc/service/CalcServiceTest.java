@@ -59,8 +59,20 @@ public class CalcServiceTest {
 
     private List<CreditData> getListOfCreditData() {
         return List.of(
-                new CreditDataBuilder().setId(1L).setApartmentCost(BigDecimal.valueOf(50)).setPercentage(BigDecimal.valueOf(2.5)).setUserOwnPayment(BigDecimal.valueOf(10)).setMonthlyPayment(BigDecimal.valueOf(2.6)).setYears(20).createCreditData(),
-                new CreditDataBuilder().setId(2L).setApartmentCost(BigDecimal.valueOf(60)).setPercentage(BigDecimal.valueOf(3.5)).setUserOwnPayment(BigDecimal.valueOf(20)).setMonthlyPayment(BigDecimal.valueOf(3.6)).setYears(20).createCreditData(),
-                new CreditDataBuilder().setId(3L).setApartmentCost(BigDecimal.valueOf(70)).setPercentage(BigDecimal.valueOf(4.5)).setUserOwnPayment(BigDecimal.valueOf(30)).setMonthlyPayment(BigDecimal.valueOf(4.6)).setYears(20).createCreditData());
+                new CreditDataBuilder().setId(1L).setApartmentCost(BigDecimal.valueOf(50))
+                        .setPercentage(BigDecimal.valueOf(2.5))
+                        .setUserOwnPayment(BigDecimal.valueOf(10))
+                        .setMonthlyPayment(BigDecimal.valueOf(2.6))
+                        .setYears(20).createCreditData(),
+                new CreditDataBuilder().setId(2L).setApartmentCost(BigDecimal.valueOf(60))
+                        .setPercentage(BigDecimal.valueOf(3.5))
+                        .setUserOwnPayment(BigDecimal.valueOf(20))
+                        .setMonthlyPayment(BigDecimal.valueOf(3.6))
+                        .setYears(20).createCreditData(),
+                new CreditDataBuilder().setId(3L).setApartmentCost(BigDecimal.valueOf(70))
+                        .setPercentage(BigDecimal.valueOf(4.5))
+                        .setUserOwnPayment(BigDecimal.valueOf(30))
+                        .setMonthlyPayment(BigDecimal.valueOf(4.6))
+                        .setYears(20).createCreditData());
     }
 }
