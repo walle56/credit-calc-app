@@ -1,7 +1,7 @@
 package com.walle.credit.calc.mapper;
 
 import com.walle.credit.calc.dto.CreditDataInputDto;
-import com.walle.credit.calc.dto.CreditDataResultDto;
+import com.walle.credit.calc.dto.CreditDataResponseDto;
 import com.walle.credit.calc.model.CreditData;
 import static com.walle.credit.calc.util.CalcConstants.ROUND_MODE;
 import static com.walle.credit.calc.util.CalcConstants.SCALE_2;
@@ -16,9 +16,9 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface CreditDataMapper {
 
-    List<CreditDataResultDto> toDto(Iterable<CreditData> allCalculations);
+    List<CreditDataResponseDto> toDtoList(List<CreditData> allCalculations);
 
-    CreditDataResultDto toDto(CreditData creditData);
+    CreditDataResponseDto toDto(CreditData creditData);
 
     @Mapping(source = "apartmentCost", target = "apartmentCost", qualifiedByName = "stringToBigDecimal")
     @Mapping(source = "percentage", target = "percentage", qualifiedByName = "stringToBigDecimal")

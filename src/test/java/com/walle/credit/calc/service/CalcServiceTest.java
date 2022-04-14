@@ -4,7 +4,6 @@ import com.walle.credit.calc.model.CreditData;
 import com.walle.credit.calc.model.CreditDataBuilder;
 import com.walle.credit.calc.repository.CreditDataRepository;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,6 +13,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
@@ -30,16 +31,14 @@ public class CalcServiceTest {
 
     @Test
     public void testReadingCalculationsDataFromDB() {
-        List<CreditData> repoData = getListOfCreditData();
-        Mockito.when(repository.findAll()).thenReturn(repoData);
+        List<CreditData> repoResp = getListOfCreditData();
+        when(repository.findAll()).thenReturn(repoResp);
 
-        Iterable<CreditData> resultIter = calcService.getAllCalculations();
+        List<CreditData> serviceResp = calcService.getAllCalculations();
 
-        List<CreditData> resultList = new ArrayList<>();
-        resultIter.forEach(resultList::add);
-        assertEquals(repoData.size(), resultList.size());
-        assertTrue(repoData.containsAll(resultList));
-        assertTrue(resultList.containsAll(repoData));
+        assertEquals(repoResp.size(), serviceResp.size());
+        assertTrue(repoResp.containsAll(serviceResp));
+        assertTrue(serviceResp.containsAll(repoResp));
     }
 
     @Test
@@ -49,12 +48,13 @@ public class CalcServiceTest {
                 .setPercentage(BigDecimal.valueOf(5.5))
                 .setUserOwnPayment(BigDecimal.valueOf(100))
                 .setYears(20).createCreditData();
-        Mockito.doNothing().when(repository.save(Mockito.any(CreditData.class)));
 
-        CreditData result = calcService.calculatePayments(creditData);
+        doNothing().when(repository.save(Mockito.any(CreditData.class)));
 
-        assertNotNull(result);
-        assertEquals(BigDecimal.valueOf(123), result.getMonthlyPayment());
+        CreditData serviceResp = calcService.calculatePayments(creditData);
+
+        assertNotNull(serviceResp);
+        assertEquals(BigDecimal.valueOf(123), serviceResp.getMonthlyPayment());
     }
 
     private List<CreditData> getListOfCreditData() {

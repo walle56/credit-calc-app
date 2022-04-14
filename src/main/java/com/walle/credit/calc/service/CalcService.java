@@ -7,9 +7,9 @@ import static com.walle.credit.calc.util.CalcConstants.SCALE_2;
 import static com.walle.credit.calc.util.CalcConstants.SCALE_8;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class CalcService {
 
@@ -17,7 +17,6 @@ public class CalcService {
 
     private final CreditDataRepository creditDataRepository;
 
-    @Autowired
     public CalcService(CreditDataRepository creditDataRepository) {
         this.creditDataRepository = creditDataRepository;
     }
@@ -69,7 +68,9 @@ public class CalcService {
      * Method to read all credit calculation
      * @return all credit calculation from the DB
      */
-    public Iterable<CreditData> getAllCalculations() {
-        return creditDataRepository.findAll();
+    public List<CreditData> getAllCalculations() {
+        List<CreditData> creditDataIter = creditDataRepository.findAll();
+        LOG.trace("List of the CreditData entities {}", creditDataIter);
+        return creditDataIter;
     }
 }

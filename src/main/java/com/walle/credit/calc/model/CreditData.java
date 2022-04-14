@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "credit_data")
 public class CreditData {
+    @Id
+    @GeneratedValue
+    private Long Id;
 
-    private @Id @GeneratedValue Long Id;
     private BigDecimal apartmentCost;
     private BigDecimal percentage;
     private BigDecimal userOwnPayment;
