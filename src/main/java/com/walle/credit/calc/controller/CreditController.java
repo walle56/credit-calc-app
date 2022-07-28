@@ -2,11 +2,11 @@ package com.walle.credit.calc.controller;
 
 import com.walle.credit.calc.dto.CreditDataInputDto;
 import com.walle.credit.calc.dto.CreditDataResponseDto;
+import com.walle.credit.calc.mapper.CreditDataMapper;
 import com.walle.credit.calc.model.Bank;
 import com.walle.credit.calc.model.CreditData;
-import com.walle.credit.calc.mapper.CreditDataMapper;
 import com.walle.credit.calc.service.BankService;
-import com.walle.credit.calc.service.CalcService;
+import com.walle.credit.calc.service.CreditService;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -27,18 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
  * Guide for naming https://restfulapi.net/resource-naming/
  */
 @RestController
-public class CalcController {
+public class CreditController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CalcController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CreditController.class);
 
     private final BankService bankService;
-    private final CalcService calcService;
+    private final CreditService creditService;
     private final CreditDataMapper creditDataMapper;
 
     @Autowired
-    public CalcController(BankService bankService, CalcService calcService, CreditDataMapper creditDataMapper) {
+    public CreditController(BankService bankService, CreditService creditService, CreditDataMapper creditDataMapper) {
         this.bankService = bankService;
-        this.calcService = calcService;
+        this.creditService = creditService;
         this.creditDataMapper = creditDataMapper;
     }
 
@@ -48,7 +48,7 @@ public class CalcController {
     public CreditDataResponseDto calculatePayments(@Valid @RequestBody CreditDataInputDto creditDataInputDto) {
         LOG.info("Received PUT request to /credits/calculate with data {}", creditDataInputDto);
 
-        CreditData creditData = calcService.calculatePayments(creditDataMapper.toEntity(creditDataInputDto));
+        CreditData creditData = creditService.calculatePayments(creditDataMapper.toEntity(creditDataInputDto));
         CreditDataResponseDto responseDto = creditDataMapper.toDto(creditData);
         setBankData(responseDto);
         return responseDto;
@@ -68,7 +68,7 @@ public class CalcController {
     public List<CreditDataResponseDto> getAllCreditsData() {
         LOG.info("Received GET request to /credits");
 
-        List<CreditData> calculations = calcService.getAllCalculations();
+        List<CreditData> calculations = creditService.getAllCalculations();
         return creditDataMapper.toDtoList(calculations);
     }
 

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * Repository class for manage CreditData entity
  */
-public interface CreditDataRepository extends JpaRepository<CreditData, Long> {
+public interface CreditRepository extends JpaRepository<CreditData, Long> {
 
     @Query("FROM CreditData cd WHERE cd.monthlyPayment = :monthlyPayment")
     CreditData findByMonthlyPayment(@Param("monthlyPayment") BigDecimal monthlyPayment);

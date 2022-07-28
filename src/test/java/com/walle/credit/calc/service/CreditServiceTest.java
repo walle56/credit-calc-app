@@ -2,39 +2,42 @@ package com.walle.credit.calc.service;
 
 import com.walle.credit.calc.model.CreditData;
 import com.walle.credit.calc.model.CreditDataBuilder;
-import com.walle.credit.calc.repository.CreditDataRepository;
+import com.walle.credit.calc.repository.CreditRepository;
 import java.math.BigDecimal;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * IMPORTANT - need to use 'import org.junit.Test;' in the unit test classes with Mockito
+ * IMPORTANT:
+ * this test uses Jupiter (JUnit5) hence all annotations and dependencies should be used from:
+ * import org.junit.jupiter.api.*
+ * import org.junit.jupiter.api.Assertions.*
  */
-@RunWith(MockitoJUnitRunner.class)
-public class CalcServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class CreditServiceTest {
 
     @Mock
-    private CreditDataRepository repository;
+    private CreditRepository repository;
 
     @InjectMocks
-    private CalcService calcService;
+    private CreditService creditService;
 
     @Test
     public void testReadingCalculationsDataFromDB() {
         List<CreditData> repoResp = getListOfCreditData();
         when(repository.findAll()).thenReturn(repoResp);
 
-        List<CreditData> serviceResp = calcService.getAllCalculations();
+        List<CreditData> serviceResp = creditService.getAllCalculations();
 
         assertEquals(repoResp.size(), serviceResp.size());
         assertTrue(repoResp.containsAll(serviceResp));
@@ -49,12 +52,12 @@ public class CalcServiceTest {
                 .setUserOwnPayment(BigDecimal.valueOf(100))
                 .setYears(20).createCreditData();
 
-        doNothing().when(repository.save(Mockito.any(CreditData.class)));
+        when(repository.save(Mockito.any(CreditData.class))).thenReturn(creditData);
 
-        CreditData serviceResp = calcService.calculatePayments(creditData);
+        CreditData serviceResp = creditService.calculatePayments(creditData);
 
         assertNotNull(serviceResp);
-        assertEquals(BigDecimal.valueOf(123), serviceResp.getMonthlyPayment());
+        assertEquals(BigDecimal.valueOf(2.75), serviceResp.getMonthlyPayment());
     }
 
     private List<CreditData> getListOfCreditData() {

@@ -5,18 +5,24 @@ import com.walle.credit.calc.repository.BankRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import static org.mockito.Matchers.eq;
-import org.mockito.Mock;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+/**
+ * IMPORTANT:
+ * this test uses Jupiter (JUnit5) hence all annotations and dependencies should be used from:
+ * import org.junit.jupiter.api.*
+ * import org.junit.jupiter.api.Assertions.*
+ */
+@ExtendWith(MockitoExtension.class)
 public class BankServiceTest {
 
     @Mock

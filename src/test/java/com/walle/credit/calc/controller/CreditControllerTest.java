@@ -3,9 +3,6 @@ package com.walle.credit.calc.controller;
 import com.walle.credit.calc.dto.CreditDataInputDto;
 import com.walle.credit.calc.dto.CreditDataResponseDto;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +13,23 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * IMPORTANT - need to use 'import org.junit.jupiter.api.Test;' in the SpringBoot integration tests
+ * IMPORTANT:
+ * this test uses Jupiter (JUnit5) hence all annotations and dependencies should be used from:
+ * import org.junit.jupiter.api.*
+ * import org.junit.jupiter.api.Assertions.*
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CalcControllerTest {
+// @DirtiesContext tells Spring to clean up DB before this test class execution
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+class CreditControllerTest {
 
     private static final String HOST = "http://localhost:";
     private static final String PATH_CALC = "/credits/calculate";

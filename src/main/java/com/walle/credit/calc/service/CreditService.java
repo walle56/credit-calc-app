@@ -1,24 +1,24 @@
 package com.walle.credit.calc.service;
 
 import com.walle.credit.calc.model.CreditData;
-import com.walle.credit.calc.repository.CreditDataRepository;
-import static com.walle.credit.calc.util.CalcConstants.ROUND_MODE;
-import static com.walle.credit.calc.util.CalcConstants.SCALE_2;
-import static com.walle.credit.calc.util.CalcConstants.SCALE_8;
+import com.walle.credit.calc.repository.CreditRepository;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static com.walle.credit.calc.util.CalcConstants.ROUND_MODE;
+import static com.walle.credit.calc.util.CalcConstants.SCALE_2;
+import static com.walle.credit.calc.util.CalcConstants.SCALE_8;
 
-public class CalcService {
+public class CreditService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CalcService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CreditService.class);
 
-    private final CreditDataRepository creditDataRepository;
+    private final CreditRepository creditRepository;
 
-    public CalcService(CreditDataRepository creditDataRepository) {
-        this.creditDataRepository = creditDataRepository;
+    public CreditService(CreditRepository creditRepository) {
+        this.creditRepository = creditRepository;
     }
 
     /**
@@ -60,7 +60,7 @@ public class CalcService {
             throw e;
         }
 
-        creditDataRepository.save(creditData);
+        creditRepository.save(creditData);
         return creditData;
     }
 
@@ -69,7 +69,7 @@ public class CalcService {
      * @return all credit calculation from the DB
      */
     public List<CreditData> getAllCalculations() {
-        List<CreditData> creditDataIter = creditDataRepository.findAll();
+        List<CreditData> creditDataIter = creditRepository.findAll();
         LOG.trace("List of the CreditData entities {}", creditDataIter);
         return creditDataIter;
     }

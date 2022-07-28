@@ -3,9 +3,7 @@ package com.walle.credit.calc.controller;
 import com.walle.credit.calc.dto.BankDto;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,10 +13,21 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * IMPORTANT:
+ * this test uses Jupiter (JUnit5) hence all annotations and dependencies should be used from:
+ * import org.junit.jupiter.api.*
+ * import org.junit.jupiter.api.Assertions.*
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+// @DirtiesContext tells Spring to clean up DB before this test class execution
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class BankControllerTest {
 
     private static final String HOST = "http://localhost:";
@@ -36,7 +45,7 @@ public class BankControllerTest {
         ResponseEntity<BankDto> response = restTemplate.exchange(HOST + port + PATH_BANKS,
                 HttpMethod.POST, new HttpEntity<>(bankDtoReq), BankDto.class);
 
-        assertEquals(204, response.getStatusCodeValue());
+        assertEquals(201, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertEquals(bankDtoReq.getName(), response.getBody().getName());
     }
