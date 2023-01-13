@@ -1,5 +1,8 @@
 package com.walle.credit.calc.service;
 
+import com.walle.credit.calc.dto.CreditDataInputDto;
+import com.walle.credit.calc.dto.CreditDataResponseDto;
+import com.walle.credit.calc.mapper.CreditDataMapper;
 import com.walle.credit.calc.model.CreditData;
 import com.walle.credit.calc.repository.CreditRepository;
 import java.math.BigDecimal;
@@ -15,19 +18,23 @@ public class CreditService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreditService.class);
 
+    private final CreditDataMapper creditDataMapper;
     private final CreditRepository creditRepository;
 
-    public CreditService(CreditRepository creditRepository) {
+    public CreditService(CreditDataMapper creditDataMapper, CreditRepository creditRepository) {
+        this.creditDataMapper = creditDataMapper;
         this.creditRepository = creditRepository;
     }
 
     /**
      * Calculates monthly payment
      *
-     * @param creditData input credit parameters
+     * @param creditDataInputDto input credit parameters
      * @return CreditData with monthly payment
      */
-    public CreditData calculatePayments(CreditData creditData) {
+    public CreditDataResponseDto calculatePayments(CreditDataInputDto creditDataInputDto) {
+        CreditData creditData = creditDataMapper.toEntity(creditDataInputDto);
+
         try {
             // calculate monthly percentage:
             // monthlyPercentage = creditData.percentage / 12 / 100
@@ -60,17 +67,17 @@ public class CreditService {
             throw e;
         }
 
-        creditRepository.save(creditData);
-        return creditData;
+        CreditData creditDataPersisted = creditRepository.save(creditData);
+        return creditDataMapper.toResponseDto(creditDataPersisted);
     }
 
     /**
      * Method to read all credit calculation
      * @return all credit calculation from the DB
      */
-    public List<CreditData> getAllCalculations() {
+    public List<CreditDataResponseDto> getAllCalculations() {
         List<CreditData> creditDataIter = creditRepository.findAll();
         LOG.trace("List of the CreditData entities {}", creditDataIter);
-        return creditDataIter;
+        return creditDataMapper.toDtoList(creditDataIter);
     }
 }

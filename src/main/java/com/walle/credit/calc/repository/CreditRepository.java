@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * Repository class for manage CreditData entity
+ * Repository class to persist CreditData entity
  */
 public interface CreditRepository extends JpaRepository<CreditData, Long> {
 

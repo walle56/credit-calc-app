@@ -27,6 +27,3 @@ It has examples of how to:
 "years": 10  }`  
 -- numbers can be in the format `50` or `50.00`  
 -- send GET request to `localhost:8081/calculate/list` to get the list of all previous calculations 
-
-### Comments:
--- PUT method is used because it is idempotent in the current context - https://restfulapi.net/idempotent-rest-apis/ 

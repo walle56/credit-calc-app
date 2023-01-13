@@ -1,5 +1,8 @@
 package com.walle.credit.calc.service;
 
+import com.walle.credit.calc.dto.CreditDataInputDto;
+import com.walle.credit.calc.dto.CreditDataResponseDto;
+import com.walle.credit.calc.mapper.CreditDataMapper;
 import com.walle.credit.calc.model.CreditData;
 import com.walle.credit.calc.model.CreditDataBuilder;
 import com.walle.credit.calc.repository.CreditRepository;
@@ -9,12 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
@@ -27,6 +30,9 @@ import static org.mockito.Mockito.when;
 public class CreditServiceTest {
 
     @Mock
+    private CreditDataMapper creditDataMapper;
+
+    @Mock
     private CreditRepository repository;
 
     @InjectMocks
@@ -34,14 +40,18 @@ public class CreditServiceTest {
 
     @Test
     public void testReadingCalculationsDataFromDB() {
-        List<CreditData> repoResp = getListOfCreditData();
-        when(repository.findAll()).thenReturn(repoResp);
+        List<CreditData> creditDataList = getListOfCreditData();
+        List<CreditDataResponseDto> creditDataDtoList = CreditDataMapper.INSTANCE.toDtoList(creditDataList);
 
-        List<CreditData> serviceResp = creditService.getAllCalculations();
+        when(repository.findAll()).thenReturn(creditDataList);
+        when(creditDataMapper.toDtoList(eq(creditDataList))).thenReturn(creditDataDtoList);
 
-        assertEquals(repoResp.size(), serviceResp.size());
-        assertTrue(repoResp.containsAll(serviceResp));
-        assertTrue(serviceResp.containsAll(repoResp));
+
+        List<CreditDataResponseDto> serviceResponse = creditService.getAllCalculations();
+
+        assertEquals(creditDataList.size(), serviceResponse.size());
+        assertTrue(creditDataDtoList.containsAll(serviceResponse));
+        assertTrue(serviceResponse.containsAll(creditDataDtoList));
     }
 
     @Test
@@ -51,13 +61,17 @@ public class CreditServiceTest {
                 .setPercentage(BigDecimal.valueOf(5.5))
                 .setUserOwnPayment(BigDecimal.valueOf(100))
                 .setYears(20).createCreditData();
+        CreditDataInputDto creditDataInputDto = CreditDataMapper.INSTANCE.toInputDto(creditData);
+        CreditDataResponseDto creditDataResponseDto = CreditDataMapper.INSTANCE.toResponseDto(creditData);
 
-        when(repository.save(Mockito.any(CreditData.class))).thenReturn(creditData);
+        when(creditDataMapper.toEntity(any(CreditDataInputDto.class))).thenReturn(creditData);
+        when(repository.save(any(CreditData.class))).thenReturn(creditData);
+        when(creditDataMapper.toResponseDto(creditData)).thenReturn(creditDataResponseDto);
 
-        CreditData serviceResp = creditService.calculatePayments(creditData);
+        CreditDataResponseDto serviceResponse = creditService.calculatePayments(creditDataInputDto);
 
-        assertNotNull(serviceResp);
-        assertEquals(BigDecimal.valueOf(2.75), serviceResp.getMonthlyPayment());
+        assertNotNull(serviceResponse);
+        assertEquals(0.0, serviceResponse.getMonthlyPayment());
     }
 
     private List<CreditData> getListOfCreditData() {

@@ -1,5 +1,7 @@
 package com.walle.credit.calc.service;
 
+import com.walle.credit.calc.dto.BankDto;
+import com.walle.credit.calc.mapper.BankMapper;
 import com.walle.credit.calc.model.Bank;
 import com.walle.credit.calc.repository.BankRepository;
 import java.util.List;
@@ -26,6 +28,9 @@ import static org.mockito.Mockito.when;
 public class BankServiceTest {
 
     @Mock
+    private BankMapper bankMapper;
+
+    @Mock
     private BankRepository bankRepository;
 
     @InjectMocks
@@ -33,41 +38,53 @@ public class BankServiceTest {
 
     @Test
     public void testSaveBank() {
-        Bank bankReq = new Bank(null, "Name1", "112233B", "City", Map.of("Offer1", 5.67));
-        Bank repoResp = new Bank(1L, "Name1", "112233B", "City", Map.of("Offer1", 5.67));
+        Bank bankRequest = new Bank(null, "Name1", "112233B", "City", Map.of("Offer1", 5.67));
+        BankDto bankRequestDto = BankMapper.INSTANCE.toDto(bankRequest);
+        Bank bankResponse = new Bank(1L, "Name1", "112233B", "City", Map.of("Offer1", 5.67));
+        BankDto bankResponseDto = BankMapper.INSTANCE.toDto(bankResponse);
 
-        when(bankRepository.save(eq(bankReq))).thenReturn(repoResp);
+        when(bankMapper.toEntity(eq(bankRequestDto))).thenReturn(bankRequest);
+        when(bankRepository.save(eq(bankRequest))).thenReturn(bankResponse);
+        when(bankMapper.toDto(eq(bankResponse))).thenReturn(bankResponseDto);
 
-        Bank serviceResp = bankService.save(bankReq);
-        assertNotNull(serviceResp);
-        assertEquals(repoResp, serviceResp);
+        BankDto serviceResponse = bankService.save(bankRequestDto);
+        assertNotNull(serviceResponse);
+        assertEquals(bankResponseDto, serviceResponse);
     }
 
     @Test
     public void testGetAllBanks() {
-        List<Bank> repoResp = List.of(
-                new Bank(1L, "Name2", "11223311B", "City1", Map.of("Offer11", 5.67)),
-                new Bank(2L, "Name2", "11223322B", "City2", Map.of("Offer12", 6.7)));
+        Bank bank1 = new Bank(1L, "Name2", "11223311B", "City1", Map.of("Offer11", 5.67));
+        BankDto bank1Dto = BankMapper.INSTANCE.toDto(bank1);
+        Bank bank2 = new Bank(2L, "Name2", "11223322B", "City2", Map.of("Offer12", 6.7));
+        BankDto bank2Dto = BankMapper.INSTANCE.toDto(bank2);
 
-        when(bankRepository.findAll()).thenReturn(repoResp);
+        List<Bank> banksList = List.of(bank1, bank2);
+        List<BankDto> banksDtoList = List.of(bank1Dto, bank2Dto);
 
-        List<Bank> serviceResp = bankService.getAllBanks();
-        assertNotNull(serviceResp);
-        assertEquals(2, serviceResp.size());
-        assertTrue(serviceResp.containsAll(repoResp));
-        assertTrue(repoResp.containsAll(serviceResp));
+        when(bankRepository.findAll()).thenReturn(banksList);
+        when(bankMapper.toDtoList(eq(banksList))).thenReturn(banksDtoList);
+
+        List<BankDto> serviceResponse = bankService.getAllBanks();
+
+        assertNotNull(serviceResponse);
+        assertEquals(2, serviceResponse.size());
+        assertTrue(serviceResponse.containsAll(banksDtoList));
+        assertTrue(banksDtoList.containsAll(serviceResponse));
     }
 
     @Test
     public void testGetBankByCreditOffer() {
         double percentage = 5.67;
-        Bank repoResp = new Bank(1L, "Name1", "112233B", "City", Map.of("Offer1", 5.67));
+        Bank bankResponse = new Bank(1L, "Name1", "112233B", "City", Map.of("Offer1", 5.67));
+        BankDto bankResponseDto = BankMapper.INSTANCE.toDto(bankResponse);
 
-        when(bankRepository.getByCreditOfferPercentage(eq(percentage))).thenReturn(repoResp);
+        when(bankRepository.getByCreditOfferPercentage(eq(percentage))).thenReturn(bankResponse);
+        when(bankMapper.toDto(bankResponse)).thenReturn(bankResponseDto);
 
-        Optional<Bank> serviceResp = bankService.getBankByCreditOffer(percentage);
-        assertTrue(serviceResp.isPresent());
-        assertEquals(repoResp, serviceResp.get());
+        Optional<BankDto> serviceResponse = bankService.getBankByCreditOffer(percentage);
+        assertTrue(serviceResponse.isPresent());
+        assertEquals(bankResponseDto, serviceResponse.get());
     }
 
     @Test
@@ -75,7 +92,7 @@ public class BankServiceTest {
         double percentage = 8.7;
         when(bankRepository.getByCreditOfferPercentage(eq(percentage))).thenReturn(null);
 
-        Optional<Bank> serviceResp = bankService.getBankByCreditOffer(percentage);
-        assertTrue(serviceResp.isEmpty());
+        Optional<BankDto> serviceResponse = bankService.getBankByCreditOffer(percentage);
+        assertTrue(serviceResponse.isEmpty());
     }
 }

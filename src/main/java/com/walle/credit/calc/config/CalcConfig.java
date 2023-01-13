@@ -1,5 +1,7 @@
 package com.walle.credit.calc.config;
 
+import com.walle.credit.calc.mapper.BankMapper;
+import com.walle.credit.calc.mapper.CreditDataMapper;
 import com.walle.credit.calc.repository.BankRepository;
 import com.walle.credit.calc.repository.CreditRepository;
 import com.walle.credit.calc.service.BankService;
@@ -11,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
 public class CalcConfig {
 
     @Bean
-    public CreditService calcService(CreditRepository creditRepository) {
-        return new CreditService(creditRepository);
+    public CreditService calcService(CreditDataMapper creditDataMapper, CreditRepository creditRepository) {
+        return new CreditService(creditDataMapper, creditRepository);
     }
 
     @Bean
-    public BankService bankService(BankRepository bankRepository) {
-        return new BankService(bankRepository);
+    public BankService bankService(BankMapper bankMapper, BankRepository bankRepository) {
+        return new BankService(bankMapper, bankRepository);
     }
 
 }

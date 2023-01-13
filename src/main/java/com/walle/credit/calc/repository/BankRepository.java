@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * Repository class for manage Bank entity
+ * Repository class to persist Bank entity
  */
 public interface BankRepository extends JpaRepository<Bank, Long> {
 
