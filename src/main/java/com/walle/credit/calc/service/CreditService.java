@@ -14,6 +14,9 @@ import static com.walle.credit.calc.util.CalcConstants.ROUND_MODE;
 import static com.walle.credit.calc.util.CalcConstants.SCALE_2;
 import static com.walle.credit.calc.util.CalcConstants.SCALE_8;
 
+/**
+ *  Class responsible for CreditData calculations
+ */
 public class CreditService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreditService.class);

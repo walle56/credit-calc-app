@@ -9,6 +9,9 @@ import com.walle.credit.calc.service.CreditService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class to create Spring Beans
+ */
 @Configuration
 public class CalcConfig {
 

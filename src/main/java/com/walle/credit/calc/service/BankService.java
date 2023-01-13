@@ -9,6 +9,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *  Class to manage Bank entity,
+ *  convert it to/from DTO and sent to the repository
+ */
 public class BankService {
 
     private static final Logger LOG = LoggerFactory.getLogger(BankService.class);

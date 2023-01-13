@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Main class to run Spring Boot application
+ * The main class to run Spring Boot application
  */
 @SpringBootApplication
 public class CreditCalcApp {
